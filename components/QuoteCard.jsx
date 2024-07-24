@@ -6,7 +6,8 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Button } from "@mui/material";
+import Button from '@mui/material/Button';
+
 const QuoteCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
   
   const {data: session} = useSession();
