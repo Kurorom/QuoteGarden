@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import Image from 'next/image';
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import Button from '@mui/material/Button';
+
 
 const QuoteCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
   
@@ -116,10 +114,17 @@ const QuoteCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
         </div>
       )}
      
-     <div className="absolute bottom-0 right-0 h-10 w-16">
-                <Button onClick={handleLike} startIcon={hasLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}>
-                    <span>{likeCount}</span>
-                </Button>
+     <div className="absolute bottom-0 right-2 h-10 w-10 inline-flex space-x-2">
+                <button onClick={handleLike} className="inline-flex space-x-2">
+                  <Image 
+                      className="mt-0.5"
+                      src={hasLiked ? '/assets/icons/heart-full.png' : '/assets/icons/heart.png'}
+                      width={20}
+                      height={15}
+                  />
+                  <span className="text-green-600">{likeCount}</span>
+                </button>
+                
             </div>
     </div>
         
