@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import QuoteCard from "./QuoteCard";
+import QuoteCard from "@components/QuoteCard";
 
 const QuoteCardList = ({ data, handleTagClick }) => {
   return (
