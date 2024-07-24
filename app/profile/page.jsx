@@ -1,70 +1,92 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import QuoteCard from "./QuoteCard";
 
-import Profile from '@components/Profile';
+const QuoteCardList = ({ data, handleTagClick }) => {
+  return (
+    <div className="mt-16 prompt_layout">
+      {data.map((post) => (
+        <QuoteCard 
+          key={post.id}
+          post={post}
+          handleTagClick={handleTagClick}
+        />
+      ))}
+    </div>
+  );
+};
 
-const MyProfile = () => {
-    const {data : session} = useSession();
-    const router = useRouter();
-    const [MyPosts, setMyPosts] = useState([]);
-    const [likedPosts, setLikedPosts] = useState([]);
+const Feed = () => {
+  const [allPosts, setAllPosts] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [searchedResult, setSearchedResult] = useState([]);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-          const response = await fetch(`/api/users/${session?.user.id}/posts`);
-          const data = await response.json();
-    
-          setMyPosts(data);
-        }
-      
-       if(session?.user.id) fetchPosts();
-      }, []);
-    
-      useEffect(() => {
-        const fetchLikedPosts = async () => {
-          const res = await fetch(`/api/users/${session?.user.id}/liked-posts`);
-          const likedPostsData = await res.json();
-          setLikedPosts(likedPostsData);
-        };
-    
-        if (session?.user.id) fetchLikedPosts();
-      }, [session?.user.id]);
+  const fetchPosts = async () => {
+    const response = await fetch('/api/quote');
+    const data = await response.json();
+    setAllPosts(data);
+  };
 
-    const handleEdit = (post) => {
-      router.push(`/update-quote?id=${post._id}`);
-    }
+  useEffect(() => {
+    fetchPosts();
+    const interval = setInterval(fetchPosts, 10000); // Refresh every 10 seconds
 
-    const handleDelete = async (post) => {
-      const hasConfirmed = confirm("Are you sure you want to delete this Quote ?");
-      if(hasConfirmed){
-        try {
-          await fetch(`/api/quote/${post._id.toString()}`
-          ,{
-            method: 'DELETE' 
-          });
+    return () => clearInterval(interval); // Clear interval on component unmount
+  }, []);
 
-          const filteredPosts = MyPosts.filter((p)=> p._id != post._id);
-          setMyPosts(filteredPosts);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
+  const filterQuotes = (searchText) => {
+    const regex = new RegExp(searchText, "i");
+    return allPosts.filter(
+      (item) =>
+        regex.test(item.creator.username) ||
+        regex.test(item.quote) ||
+        regex.test(item.tag)
+    );
+  };
+
+  const handleSearchChange = (e) => {
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value);
+
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResult = filterQuotes(e.target.value);
+        setSearchedResult(searchResult);
+      }, 500)
+    );
+  };
+
+  const handleTagClick = (tagName) => {
+    setSearchText(tagName);
+    const searchResult = filterQuotes(tagName);
+    setSearchedResult(searchResult);
+  };
 
   return (
-    
-    <Profile
-        name="My"
-        desc="Welcome to your personalized profile page"
-        data={MyPosts}
-        posts={likedPosts}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-    />
-  )
-}
+    <section className="feed">
+      <form className="relative w-full flex-center">
+        <input
+          type="text"
+          placeholder="Search for a tag or username"
+          value={searchText}
+          onChange={handleSearchChange}
+          required
+          className="search_input peer"
+        />
+      </form>
 
-export default MyProfile;
+      {searchText ? (
+        <QuoteCardList
+          data={searchedResult}
+          handleTagClick={handleTagClick}
+        />
+      ) : (
+        <QuoteCardList data={allPosts} handleTagClick={handleTagClick} />
+      )}
+    </section>
+  );
+};
+
+export default Feed;
