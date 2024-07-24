@@ -31,12 +31,12 @@ const QuoteCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
 
   const handleLike = async () => {
     
-      await fetch(`/api/quote/${post._id.toString()}?userId=${session?.user.id}`
+       const response = await fetch(`/api/quote/${post._id.toString()}?userId=${session?.user.id}`
       ,{
         method: 'PUT' ,
       });
 
-      
+      if(response.ok){
       
         setHasLiked(!hasLiked);
         if(hasLiked){
@@ -45,7 +45,7 @@ const QuoteCard = ({ post, handleTagClick, handleEdit, handleDelete}) => {
         }else{
           setLikeCount(likeCount +1);
         }
-       
+      }
       
  
 }
