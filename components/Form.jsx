@@ -35,12 +35,12 @@ const Form = ({type,post,setPost,submitting,handleSubmit,}) => {
         <label>
           <span className="font-satoshi font-semibold text-base text-gray-700">
             Tags
-            <span>(#inspirational, #business, #sport)</span>
+            <span>(inspirational, business, sport)</span>
           </span>
           <input value={post.tag}
           onChange={(e)=> setPost({ ...post, tag:
             e.target.value })}
-            placeholder="football,finance,inspirational..."
+            placeholder="tags"
             required
             className="form_input"
             />
