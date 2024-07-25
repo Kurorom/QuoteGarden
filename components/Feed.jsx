@@ -41,7 +41,7 @@ const feed = () => {
       const regex = RegExp(searchText,"i");
       return allposts.filter(
         (item)=>
-        regex.test(item.creator.username) ||
+        regex.test(item.creator?.username) ||
         regex.test(item.quote) ||
         regex.test(item.tag) 
         
