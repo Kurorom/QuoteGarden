@@ -26,32 +26,34 @@ const CreateQuote = () => {
   const createQuote = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-
-    try {
-      const response = await fetch('/api/quote/new',{
-        method: 'POST',
-        body: JSON.stringify({
-          quote: post.quote,
-          author: post.author,
-          source: post.source || '',
-          userId: session?.user.id,
-          tag: post.tag,
-          likecount: 0,
-          likedBy: []
-          
-          
+    if(session?.user.id){
+      try {
+        const response = await fetch('/api/quote/new',{
+          method: 'POST',
+          body: JSON.stringify({
+            quote: post.quote,
+            author: post.author,
+            source: post.source || '',
+            userId: session?.user.id,
+            tag: post.tag,
+            likecount: 0,
+            likedBy: []
+            
+            
+          })
         })
-      })
-
-      if(response.ok){
-        
-        router.push('/');
+  
+        if(response.ok){
+          
+          router.push('/');
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setSubmitting(false);
       }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSubmitting(false);
     }
+    
   }
  
   return (
