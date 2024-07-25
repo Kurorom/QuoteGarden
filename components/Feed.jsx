@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import QuoteCard from "./QuoteCard";
 
-const QuoteCardList = ({ data, handleTagClick }) => {
+const QuoteCardList = ({data,handleTagClick}) => {
   return (
     <div className="mt-16 prompt_layout">
-      {data.map((post) => (
+      {data.map((post) =>(
         <QuoteCard 
           key={post.id}
           post={post}
@@ -14,56 +14,57 @@ const QuoteCardList = ({ data, handleTagClick }) => {
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-const Feed = () => {
-  const [allPosts, setAllPosts] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [searchTimeout, setSearchTimeout] = useState(null);
-  const [searchedResult, setSearchedResult] = useState([]);
+const feed = () => {
 
-  const fetchPosts = async () => {
-    const response = await fetch('/api/quote');
-    const data = await response.json();
-    setAllPosts(data);
-  };
+  const  [allposts, setallposts] = useState([])
+
+  const [searchText, setsearchText] = useState('')
+  const [searchTimeOut, setsearchTimeOut] = useState(null)
+  const [searchedResult, setsearchedResult] = useState([])
+
 
   useEffect(() => {
-    fetchPosts();
-    const interval = setInterval(fetchPosts, 10000); // Refresh every 10 seconds
+    const fetchPosts = async () => {
+      const response = await fetch('/api/quote');
+      const data = await response.json();
 
-    return () => clearInterval(interval); // Clear interval on component unmount
-  }, []);
-
+      setallposts(data);
+    }
+  
+   fetchPosts();
+  }, [])
+  
   const filterQuotes = (searchText) => {
-    const regex = new RegExp(searchText, "i");
-    return allPosts.filter(
-      (item) =>
+      const regex = RegExp(searchText,"i");
+      return allposts.filter(
+        (item)=>
         regex.test(item.creator.username) ||
         regex.test(item.quote) ||
-        regex.test(item.tag)
-    );
+        regex.test(item.tag) 
+        
+      );
   };
 
-  const handleSearchChange = (e) => {
-    clearTimeout(searchTimeout);
-    setSearchText(e.target.value);
+  const handleSearchChange = (e) =>{
+    clearTimeout(searchTimeOut);
+    setsearchText(e.target.value);
 
-    setSearchTimeout(
+    setsearchTimeOut(
       setTimeout(() => {
         const searchResult = filterQuotes(e.target.value);
-        setSearchedResult(searchResult);
+        setsearchedResult(searchResult);
       }, 500)
-    );
-  };
+    )
+  }
 
-  const handleTagClick = (tagName) => {
-    setSearchText(tagName);
-    const searchResult = filterQuotes(tagName);
-    setSearchedResult(searchResult);
-  };
-
+  const handleTagClick = (tagName)=> {
+      setsearchText(tagName);
+      const searchResult = filterQuotes(tagName);
+      setsearchedResult(searchResult);
+  }
   return (
     <section className="feed">
       <form className="relative w-full flex-center">
@@ -76,17 +77,18 @@ const Feed = () => {
           className="search_input peer"
         />
       </form>
-
+    
       {searchText ? (
         <QuoteCardList
           data={searchedResult}
           handleTagClick={handleTagClick}
         />
       ) : (
-        <QuoteCardList data={allPosts} handleTagClick={handleTagClick} />
+        <QuoteCardList data={allposts} handleTagClick={handleTagClick} />
       )}
     </section>
+
   );
 };
 
-export default Feed;
+export default feed
