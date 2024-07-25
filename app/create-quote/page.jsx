@@ -24,9 +24,10 @@ const CreateQuote = () => {
     })
   
   const createQuote = async (e) => {
+    if(session?.user.id){
     e.preventDefault();
     setSubmitting(true);
-    if(session?.user.id){
+    
       try {
         const response = await fetch('/api/quote/new',{
           method: 'POST',
@@ -52,6 +53,8 @@ const CreateQuote = () => {
       } finally {
         setSubmitting(false);
       }
+    }else{
+      alert("you must logging before creating a post")
     }
     
   }
