@@ -28,7 +28,7 @@ const Nav = () => {
           height={30}
           className='object-contain'
         />
-        <p className="text-2xl logo-text">QuotesGarden</p>
+        <p className="sm:text-xl lg:text-2xl logo-text">QuotesGarden</p>
       </Link>
 
       <div className='sm:flex hidden'>
