@@ -9,7 +9,7 @@ const Home = () => {
             <span className="green_gradient text-center"> Best Quotes</span>
         </h1>
         <p className="desc text-center">
-        QuoteShare, your ultimate destination for discovering and sharing inspiring quotes.
+        QuoteGarden, your ultimate destination for discovering and sharing inspiring quotes.
          Whether you’re looking for motivation, wisdom,
          or a good laugh, our community-driven platform has something for everyone.
         </p>
