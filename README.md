@@ -22,7 +22,8 @@
 - **TailwindCSS**: Modern CSS framework for responsive and stylish designs.  
 
 ### Backend:  
-- **Node.js**: Handles server-side logic and API endpoints.  
+- **Node.js**: Handles server-side logic
+- **Next.js**: for API and routing .  
 - **MongoDB**: A NoSQL database for managing user posts and interactions.  
 
 ### Deployment:  
